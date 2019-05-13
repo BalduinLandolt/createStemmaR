@@ -64,3 +64,34 @@ END; [beendet den Data-Block]"
 
 
 
+get_random_data = function(){
+  # random dimensions
+  rows = floor(runif(1, min=5, max=15))
+  cols = floor(runif(1, min=20, max=200))
+  
+  frame = data.frame()
+  
+  # add names (first column)
+  #nn = c()
+  #for (r in 1:rows) {
+  #  nn = append(nn, as.character(r))
+  #}
+  #frame$name = nn
+  
+  # add random data by column
+  for (col in 1:cols){
+    taxon = c()
+    # do for every row in current column
+    for (r in 1:rows) {
+      frame[r,col] = as.character(floor(runif(1, min=0, max=9)))
+    }
+  }
+  
+  frame = cbind(rownames(frame), frame)
+  
+  # return data frame
+  frame
+}
+
+
+
