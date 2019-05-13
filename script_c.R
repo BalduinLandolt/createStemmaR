@@ -84,3 +84,10 @@ plot.phylo(nj_data, use.edge.length=FALSE, cex=0.75)
 
 write.tree(nj_data, file="tree.tre")
 
+
+
+
+
+# library(anchors)
+# data=replace.value(data, names = colnames(data) ,from = "-", to = "-1")
+
