@@ -7,8 +7,10 @@
 # imports
 #
 # Needs packages:
-# - anchors
-# -
+# - ape
+#   [run: install.packages("ape") ]
+# - phangorn
+#   [run: install.packages("phangorn") ]
 
 library(ape)
 library(phangorn)
