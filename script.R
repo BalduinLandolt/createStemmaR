@@ -81,6 +81,10 @@ tree = dist.ml(phy)
 nj_data = NJ(tree)
 
 plot.phylo(nj_data, use.edge.length=FALSE, cex=0.75)
+plot.phylo(nj_data, use.edge.length=TRUE)
+plot.phylo(nj_data, type = "unrooted", lab4ut = "axial")
+plot.phylo(nj_data, type = "unrooted")
+plot.phylo(nj_data, type = "radial")
 
 write.tree(nj_data, file="data/tree.tre")
 
