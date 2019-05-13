@@ -12,13 +12,14 @@
 # - phangorn
 #   [run: install.packages("phangorn") ]
 
+
 library(ape)
 library(phangorn)
 
 
 
 
-
+# load trivial sample data
 data = read.csv("data/trivial.csv", header = T, sep = ";", stringsAsFactors = F, skip = 0)
 head(data)
 
@@ -31,7 +32,7 @@ normalize_name = function(x){
   n
 }
 
-
+# generate nexus file header
 header1 = "#NEXUS
 BEGIN data;[eröffnet den Data-Block]
 Dimensions ntax="
@@ -43,9 +44,10 @@ missing=?
 gap=- [Definiert den Datentyp und Symbole für fehlende Daten (?) und gaps (-)]
 Symbols=\"0 1 2 3 4 5 6 7 8 9\";
 Matrix [hier beginnt das Alignment...]"
-
 header = paste(header1, nrow(data), header2, ncol(data)-1, header3, sep = "")
-#d = sapply(data, collate)
+
+
+# generate data alignment string from data
 lines = c()
 for (r in 1:nrow(data)){
   line = normalize_name(data[r,1])
@@ -60,38 +62,37 @@ END; [beendet den Data-Block]"
 
 # TODO make names unique
 
-
+# safe nexus file
 cat(header, lines, tail, file="data/tax.nex", sep = "\n")
 
+# read nexus data
 d = read.nexus.data("data/tax.nex")
 str(d)
 d
 
-#dist.dna(d)
-
+# create phyDat object from nexus
 phy = phyDat(d, type = "USER", levels = c("?","-","0","1","2","3","4","5"))
-
 str(phy)
 summary(phy)
 
-#phy = read.phyDat("tax_b.nex", format = "nexus", type = "USER", levels = c(0:9))
-
+# calculate tree from data
 tree = dist.ml(phy)
-
 nj_data = NJ(tree)
 
+# plot tree (in several different looks)
 plot.phylo(nj_data, use.edge.length=FALSE, cex=0.75)
 plot.phylo(nj_data, use.edge.length=TRUE)
 plot.phylo(nj_data, type = "unrooted", lab4ut = "axial")
 plot.phylo(nj_data, type = "unrooted")
 plot.phylo(nj_data, type = "radial")
 
+# safe tree to file
 write.tree(nj_data, file="data/tree.tre")
 
 
 
 
-
+# -> old notes... might still be of use
 # library(anchors)
 # data=replace.value(data, names = colnames(data) ,from = "-", to = "-1")
 
