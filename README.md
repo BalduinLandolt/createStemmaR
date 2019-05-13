@@ -24,7 +24,6 @@ From the input data it calculates an NJ-tree and plots it.
 
 ### To Do
 
-- Random data
 - more kinds of tree calculation
 
 
