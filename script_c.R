@@ -1,0 +1,84 @@
+
+# Run instructions:
+#
+# - set working directory to where the data lies, or adjust paths accordingly.
+
+
+# imports
+#
+# Needs packages:
+# - anchors
+# -
+
+library(ape)
+library(phangorn)
+
+
+
+
+
+data = read.csv("trivial.csv", header = T, sep = ";", stringsAsFactors = F, skip = 0)
+head(data)
+
+
+normalize_name = function(x){
+  n = as.character(x)
+  n = paste(n, "          ", sep = "")
+  n = substr(n, start = 1, stop = 9)
+  n = paste(n, " ", sep = "")
+  n
+}
+
+
+header1 = "#NEXUS
+BEGIN data;[eröffnet den Data-Block]
+Dimensions ntax="
+header2 = " nchar="
+header3="; [Definiert die Größe des Alignments]
+Format
+datatype=standard
+missing=?
+gap=- [Definiert den Datentyp und Symbole für fehlende Daten (?) und gaps (-)]
+Symbols=\"0 1 2 3 4 5 6 7 8 9\";
+Matrix [hier beginnt das Alignment...]"
+
+header = paste(header1, nrow(data), header2, ncol(data)-1, header3, sep = "")
+#d = sapply(data, collate)
+lines = c()
+for (r in 1:nrow(data)){
+  line = normalize_name(data[r,1])
+  for (c in 2:ncol(data)){
+    line = paste(line, as.character(data[r,c]), sep="")
+  }
+  lines = append(lines, line)
+}
+
+tail = "; [...und hier endet es]
+END; [beendet den Data-Block]"
+
+# TODO make names unique
+
+
+cat(header, lines, tail, file="tax.nex", sep = "\n")
+
+d = read.nexus.data("tax.nex")
+str(d)
+d
+
+#dist.dna(d)
+
+phy = phyDat(d, type = "USER", levels = c("?","-","0","1","2","3","4","5"))
+
+str(phy)
+summary(phy)
+
+#phy = read.phyDat("tax_b.nex", format = "nexus", type = "USER", levels = c(0:9))
+
+tree = dist.ml(phy)
+
+nj_data = NJ(tree)
+
+plot.phylo(nj_data, use.edge.length=FALSE, cex=0.75)
+
+write.tree(nj_data, file="tree.tre")
+
