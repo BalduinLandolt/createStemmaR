@@ -19,7 +19,7 @@ library(phangorn)
 
 
 
-data = read.csv("trivial.csv", header = T, sep = ";", stringsAsFactors = F, skip = 0)
+data = read.csv("data/trivial.csv", header = T, sep = ";", stringsAsFactors = F, skip = 0)
 head(data)
 
 
@@ -61,9 +61,9 @@ END; [beendet den Data-Block]"
 # TODO make names unique
 
 
-cat(header, lines, tail, file="tax.nex", sep = "\n")
+cat(header, lines, tail, file="data/tax.nex", sep = "\n")
 
-d = read.nexus.data("tax.nex")
+d = read.nexus.data("data/tax.nex")
 str(d)
 d
 
@@ -82,7 +82,7 @@ nj_data = NJ(tree)
 
 plot.phylo(nj_data, use.edge.length=FALSE, cex=0.75)
 
-write.tree(nj_data, file="tree.tre")
+write.tree(nj_data, file="data/tree.tre")
 
 
 
