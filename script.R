@@ -30,6 +30,8 @@ source("tree_maker.R")
 
 data = read.csv("data/trivial.csv", header = T, sep = ";", stringsAsFactors = F, skip = 0)
 make_tree(d, name = "trivial")
+data = get_random_data()
+make_tree(data, name = "random")
 
 
 
