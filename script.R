@@ -17,6 +17,19 @@ library(ape)
 library(phangorn)
 
 source("utils_phylo.R")
+source("tree_maker.R")
+
+
+
+#
+# Make Tree with Function
+# =======================
+#
+#
+
+
+data = read.csv("data/trivial.csv", header = T, sep = ";", stringsAsFactors = F, skip = 0)
+make_tree(d, name = "trivial")
 
 
 
