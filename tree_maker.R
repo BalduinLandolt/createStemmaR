@@ -45,4 +45,8 @@ make_tree = function(d, name){
   
   # safe tree to file
   write.tree(nj_data, file=tree_path)
+  
+  
+  plot(nj_data, main = "Plot with Title 1")
+  plot(nj_data, main = "Plot with Title 2", type = "unrooted")
 }
