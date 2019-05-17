@@ -6,4 +6,5 @@
 *.Rproj
 
 data/
+
 !data/trivial.csv
