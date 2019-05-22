@@ -1,33 +1,62 @@
 
+# General Information:
+# ====================
+#
+# For a more comprehensive introduction to this script, see 'Readme.md' on:
+# https://github.com/BalduinLandolt/createStemmaR
+#
+
+
 # Run instructions:
+# =================
 #
 # - set working directory to where the data lies, or adjust paths accordingly.
+# - install required packages
+# - run script step by step
 
 
-# imports
+# imports:
+# ========
 #
-# Needs packages:
+# Required packages:
 # - ape
 #   [run: install.packages("ape") ]
 # - phangorn
 #   [run: install.packages("phangorn") ]
 
 
+
+
+
+# Script starts here
+# ==================
+
+
+
+
+# load packages
 library(ape)
 library(phangorn)
 
 
 
-#
-# Make Tree with Function
-# =======================
-#
-#
 
-
+# load pre-made trivial data sample
 data = read.csv("data/trivial.csv", header = T, sep = ";", stringsAsFactors = F, skip = 0)
+
+# from that data, calculate trees using several different algorythms,
+# and plot the according dendrograms
+# (method that does that is specified below)
 make_tree(d, name = "trivial")
+
+
+
+
+# generate a random sample of data
+# (you'll get complete nonsense, of course.)
 data = get_random_data()
+
+# calculate and plot the same dendrograms from this data
 make_tree(data, name = "random")
 
 
