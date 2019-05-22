@@ -44,6 +44,9 @@ library(phangorn)
 # load pre-made trivial data sample
 data = read.csv("data/trivial.csv", header = T, sep = ";", stringsAsFactors = F, skip = 0)
 
+# print head of data
+head(data)
+
 # from that data, calculate trees using several different algorythms,
 # and plot the according dendrograms
 # (method that does that is specified below)
@@ -52,9 +55,13 @@ make_tree(d, name = "trivial")
 
 
 
+
 # generate a random sample of data
 # (you'll get complete nonsense, of course.)
 data = get_random_data()
+
+# print head of data
+head(data)
 
 # calculate and plot the same dendrograms from this data
 make_tree(data, name = "random")
@@ -295,7 +302,8 @@ get_random_data = function(){
     taxon = c()
     # do for every row in current column
     for (r in 1:rows) {
-      frame[r,col] = as.character(floor(runif(1, min=0, max=9)))
+      i = floor(runif(1, min=0, max=9))
+      frame[r,col] = as.character(i)
     }
   }
   
@@ -320,7 +328,7 @@ make_tree = function(d, name){
   d = read.nexus.data(nexus_path)
   
   # create phyDat object from nexus
-  phy = phyDat(d, type = "USER", levels = c("?","-","0","1","2","3","4","5"))
+  phy = phyDat(d, type = "USER", levels = c("?","-","0","1","2","3","4","5","6","7","8","9"))
   
   # calculate tree from data
   tree = dist.ml(phy)
