@@ -10,6 +10,74 @@
 #
 
 
+
+make_trees = function(data, name){
+  
+  res = list(name = name)
+  
+  
+  nexus_path = paste("data/", name, ".nex", sep = "")
+  tree_path = paste("data/", name, "_tree.tre", sep = "")
+  
+  safe_nexus(data, f = nexus_path)
+  
+  
+  # read nexus data
+  d = read.nexus.data(nexus_path)
+  
+  # create phyDat object from nexus
+  phy = phyDat(d, type = "USER", levels = c("?","-","0","1","2","3","4","5","6","7","8","9"))
+  res$phyDat = phy
+  
+  # calculate tree from data
+  tree = dist.ml(phy)
+  nj_data = NJ(tree)
+  res$NJ = nj_data
+  
+  
+  
+  # max pars
+  pars_data = pratchet(phy)
+  res$maximum_parsimony = pars_data
+  
+  
+  
+  bt = bootstrap.phyDat(phy,FUN = function(x)nj(dist.hamming(x)), bs=50)
+  res$bootstrap50 = bt
+  #consensus
+  cnt = consensusNet(bt)
+  res$consensusNet = cnt
+  
+  
+  
+  # safe tree to file
+  write.tree(nj_data, file=tree_path)
+  
+  return(res)
+}
+
+
+
+plot_trees = function(trees){
+  
+  #plot(trees$phyDat, main = "PhyDat")
+  
+  plot(trees$NJ, main = "Neighbour Join - Type: Phylogram", sub = trees$name)
+  plot(trees$NJ, main = "Neighbour Join - Type: Unrooted", type = "unrooted", sub = trees$name)
+  plot(trees$NJ, main = "Neighbour Join - Type: Radial", type = "radial", sub = trees$name)
+  
+  plot(trees$maximum_parsimony, main = "Maximum Parsimony - Type: Phylogram", sub = trees$name)
+  plot(trees$maximum_parsimony, main = "Maximum Parsimony - Type: Unrooted", type = "unrooted", sub = trees$name)
+  plot(trees$maximum_parsimony, main = "Maximum Parsimony - Type: Radial", type = "radial", sub = trees$name)
+  
+  #plot(trees$consensusNet, main = "Consensus Net", sub = trees$name)
+  plot(trees$consensusNet, "2D", main = "Consensus Net", sub = trees$name)
+  
+}
+
+
+
+
 # function to create nexus as string
 safe_nexus = function(data, f){
   header = generate_header(data)
@@ -19,6 +87,8 @@ safe_nexus = function(data, f){
   # safe nexus file
   cat(header, body, tail, file=f, sep = "\n")
 }
+
+
 
 
 # generate nexus file header
@@ -39,6 +109,8 @@ Matrix [hier beginnt das Alignment...]"
 }
 
 
+
+
 normalize_name = function(x){
   n = as.character(x)
   n = paste(n, "____________", sep = "")
@@ -46,6 +118,8 @@ normalize_name = function(x){
   n = paste(n, " ", sep = "")
   n
 }
+
+
 
 
 # generate data alignment string from data
@@ -60,6 +134,8 @@ generate_body = function(data){
   }
   body = paste(lines, sep = "\n")
 }
+
+
 
 
 get_tail = function(){
