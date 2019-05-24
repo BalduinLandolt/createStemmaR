@@ -52,6 +52,10 @@ source("functions.R")
 
 
 
+# printing sessionInfo() is always a good practice. Knowing this info makes things reproduceable.
+sessionInfo()
+
+
 
 # load pre-made trivial data sample
 data = read.csv("data/trivial.csv", header = T, sep = ";", stringsAsFactors = F, skip = 0)

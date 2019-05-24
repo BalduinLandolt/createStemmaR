@@ -11,39 +11,62 @@
 
 
 
+
+#
+# This Function calculates different trees from a data set, using different algorithms
+# 
+# Parameters:
+#   data (data.frame): an alignement of taxa
+#   name (character): whatever the three is supposed to be called
+#
+# returns:
+#   list: a list of different tree-shaped interpretations of the input data
+#
+
 make_trees = function(data, name){
   
+  # initialize the list eventually to be returned
+  # add name to the list
   res = list(name = name)
   
-  
+  # generate paths for saving nexus and tree file to disk
+  # (to be able to check results after run time) 
   nexus_path = paste("data/", name, ".nex", sep = "")
   tree_path = paste("data/", name, "_tree.tre", sep = "")
   
+  # safe nexus to disk
   safe_nexus(data, f = nexus_path)
   
-  
-  # read nexus data
+  # read nexus data from disk in propper nexus format
   d = read.nexus.data(nexus_path)
+  # the above is technically a workaround I came up with, to avoid data format problems.
+  # storing the nexus file is just a nice side effect.
   
-  # create phyDat object from nexus
+  
+  
+  # create phyDat object from nexus data
   phy = phyDat(d, type = "USER", levels = c("?","-","0","1","2","3","4","5","6","7","8","9"))
+  # store in result list
   res$phyDat = phy
   
-  # calculate tree from data
+  # calculate neighbour join tree from data
   tree = dist.ml(phy)
   nj_data = NJ(tree)
+  # store in result list
   res$NJ = nj_data
   
   
-  
-  # max pars
+  # create maximum parsimony tree
   pars_data = pratchet(phy)
+  # store in result list
   res$maximum_parsimony = pars_data
   
   
-  
+  # create a bootstrap tree with 50 iterations
   bt = bootstrap.phyDat(phy,FUN = function(x)nj(dist.hamming(x)), bs=50)
+  # store in result list
   res$bootstrap50 = bt
+  
   #consensus
   cnt = consensusNet(bt)
   res$consensusNet = cnt
