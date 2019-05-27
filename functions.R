@@ -25,9 +25,6 @@
 
 make_trees = function(data, name){
   
-  # set Seed, to make random stuff reproduceable
-  set.seed(123)
-  
   # initialize the list eventually to be returned
   # add name to the list
   res = list(name = name)
