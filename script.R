@@ -91,6 +91,6 @@ plot_trees(trees)
 
 # For an extra easter egg:
 # Run the following line (un-comment it) and get a super fancy 3D plot.
-#plot(trees$consensusNet)
+# plot(trees$consensusNet)
 
 

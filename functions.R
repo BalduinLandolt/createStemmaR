@@ -5,7 +5,7 @@
 # Functions
 # =========
 #
-#
+# Here, the functions are declared, that are used in `script.R`.
 #
 #
 
@@ -19,7 +19,7 @@
 #   data (data.frame): an alignement of taxa
 #   name (character): whatever the three is supposed to be called
 #
-# returns:
+# Returns:
 #   list: a list of different tree-shaped interpretations of the input data
 #
 
@@ -80,10 +80,19 @@ make_trees = function(data, name){
 }
 
 
+#
+# This function plots the tree data to dendograms
+#
+# Parameters:
+#   trees (list): a list of different tree data, as produced by `make_trees()`
+#
+# Returns:
+#   NULL
+#
 
 plot_trees = function(trees){
   
-  #plot(trees$phyDat, main = "PhyDat")
+  # plot different interpretations of the data
   
   plot(trees$NJ, main = "Neighbour Join - Type: Phylogram", sub = trees$name)
   plot(trees$NJ, main = "Neighbour Join - Type: Unrooted", type = "unrooted", sub = trees$name)
