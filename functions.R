@@ -25,6 +25,9 @@
 
 make_trees = function(data, name){
   
+  # set Seed, to make random stuff reproduceable
+  set.seed(123)
+  
   # initialize the list eventually to be returned
   # add name to the list
   res = list(name = name)
@@ -67,10 +70,13 @@ make_trees = function(data, name){
   # store in result list
   res$bootstrap50 = bt
   
-  #consensus
+  #consensus net
   cnt = consensusNet(bt)
   res$consensusNet = cnt
   
+  # neighbour net
+  nnt = neighborNet(dist.hamming(phy))
+  res$neighbourNet = nnt
   
   
   # safe tree to file
@@ -103,8 +109,11 @@ plot_trees = function(trees){
   plot(trees$maximum_parsimony, main = "Maximum Parsimony - Type: Radial", type = "radial", sub = trees$name)
   
   #plot(trees$consensusNet, main = "Consensus Net", sub = trees$name)
-  plot(trees$consensusNet, "2D", main = "Consensus Net", sub = trees$name)
+  plot(trees$consensusNet, "2D")
+  title(main = "Consensus Net\n(2D Rendering)", sub = trees$name)
   
+  plot(trees$neighbourNet, "2D")
+  title(main = "Neighbour Net", sub = trees$name)
 }
 
 
