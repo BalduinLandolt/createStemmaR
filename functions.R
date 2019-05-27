@@ -63,16 +63,20 @@ make_trees = function(data, name){
   # Maximum Likelyhood
   fit = pml(nj_data, phy)
   fit = optim.pml(fit, rearrangement="NNI")
-  bs = bootstrap.pml(fit, bs=100, optNni=TRUE)
+  bs = bootstrap.pml(fit, bs=20, optNni=TRUE)
   res$maxLikely = bs
+  
+  print("Made max likelyhood")
   
   # Maximum parsimony
   treeMP = pratchet(phy)
   treeMP = acctran(treeMP, phy)
-  BStrees = bootstrap.phyDat(phy, pratchet, bs = 100)
+  BStrees = bootstrap.phyDat(phy, pratchet, bs = 20)
   
   res$treeMP = treeMP
   res$maxParsimonyTrees = BStrees
+  
+  print("Made max pars")
   
   
   # create maximum parsimony tree
@@ -87,7 +91,8 @@ make_trees = function(data, name){
   #res$bootstrap50 = bt
   
   #consensus net
-  cnt = consensusNet(BStrees)
+  #cnt = consensusNet(BStrees)
+  cnt = consensusNet(bootstrap.phyDat(phy, FUN = function(x)nj(dist.hamming(x)), bs=20))
   res$consensusNet = cnt
   
   # neighbour net
