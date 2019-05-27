@@ -5,6 +5,6 @@
 
 *.Rproj
 
-data/
+data/*
 
 !data/trivial.csv
