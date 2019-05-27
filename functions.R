@@ -59,6 +59,15 @@ make_trees = function(data, name){
   res$NJ = nj_data
   
   
+  
+  # Maximum Likelyhood
+  fit <- pml(nj_data, phy)
+  fit <- optim.pml(fit, rearrangement="NNI")
+  bs <- bootstrap.pml(fit, bs=100, optNni=TRUE)
+  res$maxLikely = bs
+  
+  
+  
   # create maximum parsimony tree
   pars_data = pratchet(phy)
   # store in result list
@@ -104,9 +113,11 @@ plot_trees = function(trees){
   plot(trees$NJ, main = "Neighbour Join - Type: Unrooted", type = "unrooted", sub = trees$name)
   plot(trees$NJ, main = "Neighbour Join - Type: Radial", type = "radial", sub = trees$name)
   
-  plot(trees$maximum_parsimony, main = "Maximum Parsimony - Type: Phylogram", sub = trees$name)
-  plot(trees$maximum_parsimony, main = "Maximum Parsimony - Type: Unrooted", type = "unrooted", sub = trees$name)
-  plot(trees$maximum_parsimony, main = "Maximum Parsimony - Type: Radial", type = "radial", sub = trees$name)
+  plotBS(trees$NJ, trees$maxLikely, "unrooted", main="Maximum Likelyhood: Unrooted", sub = trees$name)
+  
+  #plot(trees$maximum_parsimony, main = "Maximum Parsimony - Type: Phylogram", sub = trees$name)
+  #plot(trees$maximum_parsimony, main = "Maximum Parsimony - Type: Unrooted", type = "unrooted", sub = trees$name)
+  #plot(trees$maximum_parsimony, main = "Maximum Parsimony - Type: Radial", type = "radial", sub = trees$name)
   
   #plot(trees$consensusNet, main = "Consensus Net", sub = trees$name)
   plot(trees$consensusNet, "2D")
