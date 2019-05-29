@@ -13,6 +13,9 @@
 
 
 #
+# make_trees
+# ----------
+#
 # This Function calculates different trees from a data set, using different algorithms
 # 
 # Parameters:
@@ -34,8 +37,8 @@ make_trees = function(data, name){
   nexus_path = paste("data/", name, ".nex", sep = "")
   tree_path = paste("data/", name, "_tree.tre", sep = "")
   
-  # safe nexus to disk
-  safe_nexus(data, f = nexus_path)
+  # save nexus to disk
+  save_nexus(data, f = nexus_path)
   
   # read nexus data from disk in propper nexus format
   d = read.nexus.data(nexus_path)
@@ -56,14 +59,15 @@ make_trees = function(data, name){
   res$NJ = nj_data
   
   
+  # NB for Max. Likelyhood, Max. Parsimony and Consensus Net:
+  # Bootstrap Values of 20 (`bs = 20`) are too low for reliable results.
+  # But having reasonable values (e.g. `100`) slows down the program a lot.
   
   # Maximum Likelyhood
   fit = pml(nj_data, phy)
   fit = optim.pml(fit, rearrangement="NNI")
   bs = bootstrap.pml(fit, bs=20, optNni=TRUE)
   res$maxLikely = bs
-  
-  print("Made max likelyhood")
   
   # Maximum parsimony
   treeMP = pratchet(phy)
@@ -73,22 +77,7 @@ make_trees = function(data, name){
   res$treeMP = treeMP
   res$maxParsimonyTrees = BStrees
   
-  print("Made max pars")
-  
-  
-  # create maximum parsimony tree
-  #pars_data = pratchet(phy)
-  # store in result list
-  #res$maximum_parsimony = pars_data
-  
-  
-  # create a bootstrap tree with 50 iterations
-  #bt = bootstrap.phyDat(phy,FUN = function(x)nj(dist.hamming(x)), bs=50)
-  # store in result list
-  #res$bootstrap50 = bt
-  
   #consensus net
-  #cnt = consensusNet(BStrees)
   cnt = consensusNet(bootstrap.phyDat(phy, FUN = function(x)nj(dist.hamming(x)), bs=20))
   res$consensusNet = cnt
   
@@ -97,13 +86,16 @@ make_trees = function(data, name){
   res$neighbourNet = nnt
   
   
-  # safe tree to file
+  # save tree to file (reproducability)
   write.tree(nj_data, file=tree_path)
   
   return(res)
 }
 
 
+#
+# plot_trees
+# ----------
 #
 # This function plots the tree data to dendograms
 #
@@ -128,11 +120,6 @@ plot_trees = function(trees){
   plotBS(trees$treeMP, trees$maxParsimonyTrees, "unrooted", main="Maximum Parsimony: Unrooted", sub = trees$name)
   plotBS(trees$treeMP, trees$maxParsimonyTrees, "phylogram", main="Maximum Parsimony: Phylogram", sub = trees$name)
   
-  #plot(trees$maximum_parsimony, main = "Maximum Parsimony - Type: Phylogram", sub = trees$name)
-  #plot(trees$maximum_parsimony, main = "Maximum Parsimony - Type: Unrooted", type = "unrooted", sub = trees$name)
-  #plot(trees$maximum_parsimony, main = "Maximum Parsimony - Type: Radial", type = "radial", sub = trees$name)
-  
-  #plot(trees$consensusNet, main = "Consensus Net", sub = trees$name)
   plot(trees$consensusNet, "2D")
   title(main = "Consensus Net\n(2D Rendering)", sub = trees$name)
   
@@ -142,21 +129,46 @@ plot_trees = function(trees){
 
 
 
-
-# function to create nexus as string
-safe_nexus = function(data, f){
+#
+# save_nexus
+# ----------
+#
+# This function saves given data to a given file in valid .nexus format
+#
+# Parameters:
+#   data (data.frame): an alignment of taxa
+#   f (character): path to the file, where data is supposed to be stored. (should end on `.nex`)
+#
+# Returns:
+#   NULL
+#
+save_nexus = function(data, f){
   header = generate_header(data)
   body = generate_body(data)
   tail = get_tail()
   
-  # safe nexus file
+  # save nexus file
   cat(header, body, tail, file=f, sep = "\n")
 }
 
 
 
 
-# generate nexus file header
+#
+# generate_header
+# ---------------
+#
+# This function generates the opening sequence of a nexus file.
+# (Should only be called from `save_nexus()`)
+# NB: The symboles are hard-coded here:
+# 0:9 for regular symbols; - for gap; ? for missing.
+#
+# Parameters:
+#   data (data.frame): an alignment of taxa; only used for the dimensions of the matrix.
+#
+# Returns:
+#   character: said nexus header.
+#
 generate_header = function(data){
   header1 = "#NEXUS
 BEGIN data;[eröffnet den Data-Block]
@@ -254,7 +266,7 @@ make_tree = function(d, name){
   nexus_path = paste("data/", name, ".nex", sep = "")
   tree_path = paste("data/", name, "_tree.tre", sep = "")
   
-  safe_nexus(data, f = nexus_path)
+  save_nexus(data, f = nexus_path)
   
   
   # read nexus data
@@ -293,7 +305,7 @@ make_tree = function(d, name){
   
   
   
-  # safe tree to file
+  # save tree to file
   write.tree(nj_data, file=tree_path)
   
   
