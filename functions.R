@@ -188,7 +188,20 @@ Matrix [hier beginnt das Alignment...]"
 
 
 
-# generate data alignment string from data
+
+#
+# generate_body
+# -------------
+#
+# This function generates the matrix sequence of a nexus file.
+# (Should only be called from `save_nexus()`)
+#
+# Parameters:
+#   data (data.frame): an alignment of taxa; from this data, the matrix of the nexus file is generated.
+#
+# Returns:
+#   character: said nexus body
+#
 generate_body = function(data){
   lines = c()
   for (r in 1:nrow(data)){
@@ -204,6 +217,19 @@ generate_body = function(data){
 
 
 
+#
+# get_tail
+# --------
+#
+# This function returns the end sequence of a nexus file.
+# (Should only be called from `save_nexus()`)
+#
+# Parameters:
+#   none
+#
+# Returns:
+#   character: said nexus tail
+#
 get_tail = function(){
   tail = "; [...und hier endet es]
 END; [beendet den Data-Block]"
