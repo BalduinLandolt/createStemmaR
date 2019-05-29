@@ -188,17 +188,6 @@ Matrix [hier beginnt das Alignment...]"
 
 
 
-normalize_name = function(x){
-  n = as.character(x)
-  n = paste(n, "____________", sep = "")
-  n = substr(n, start = 1, stop = 10)
-  n = paste(n, " ", sep = "")
-  n
-}
-
-
-
-
 # generate data alignment string from data
 generate_body = function(data){
   lines = c()
@@ -222,6 +211,17 @@ END; [beendet den Data-Block]"
 }
 
 
+
+
+
+
+normalize_name = function(x){
+  n = as.character(x)
+  n = paste(n, "____________", sep = "")
+  n = substr(n, start = 1, stop = 10)
+  n = paste(n, " ", sep = "")
+  n
+}
 
 # TODO make names unique
 
