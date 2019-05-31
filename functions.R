@@ -203,9 +203,9 @@ Matrix [hier beginnt das Alignment...]"
 #   character: said nexus body
 #
 generate_body = function(data){
+  data[[1]] = make_unique_names(data[[1]])
   lines = c()
   for (r in 1:nrow(data)){
-    line = normalize_name(data[r,1])
     for (c in 2:ncol(data)){
       line = paste(line, as.character(data[r,c]), sep="")
     }
@@ -213,6 +213,42 @@ generate_body = function(data){
   }
   body = paste(lines, sep = "\n")
 }
+
+
+
+
+#
+# make_unique_names
+# -----------------
+#
+# This function makes sure that every name is only used once.
+# If names occur multiple times, the last couple of characters get replaced by underscore plus an incrementing number.
+#
+# Parameters:
+#   names (vector): names, potentially not unique.
+#
+# Returns:
+#   vector: a vector of same length and order, but with unique names in it
+#
+make_unique_names = function(names){
+  res = c()
+  for (name in names) {
+    name = normalize_name(name)
+    i = 1
+    while (name %in% res) {
+      name = trimws(name)
+      replacement = as.character(i)
+      end = nchar(name)-nchar(replacement)-1
+      name = substr(name, 1, end)
+      name = paste(name, replacement, sep = "_")
+      name = normalize_name(name)
+      i = i+1
+    }
+    res = c(res, name)
+  }
+  res
+}
+
 
 
 
@@ -274,7 +310,7 @@ normalize_name = function(x){
   n
 }
 
-# TODO make names unique
+# TODO make names unique: Eventually, a 
 
 
 
