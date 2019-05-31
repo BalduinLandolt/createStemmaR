@@ -241,6 +241,25 @@ END; [beendet den Data-Block]"
 
 
 
+
+#
+# normalize_name
+# --------------
+#
+# This function returns normalizes "species" names so that they are valid for a nexus file.
+#
+# A valid name is exactly 10 characters long, followed by a whitespace.
+# The input gets shortened to 10 characters, if it's longer than that;
+# if it's shorter, underscores are appended to make it 10 characters long.
+#
+# Parameters:
+#   x (character): input name to be normalized
+#
+# Returns:
+#   character: normalization of the imput
+#
+# TODO: remove all characters that are not [A-Za-z0-9]
+# 
 normalize_name = function(x){
   n = as.character(x)
   n = paste(n, "____________", sep = "")
