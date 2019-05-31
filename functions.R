@@ -252,16 +252,22 @@ END; [beendet den Data-Block]"
 # The input gets shortened to 10 characters, if it's longer than that;
 # if it's shorter, underscores are appended to make it 10 characters long.
 #
+# Blanks, hyphens and dots are replaced by Underscore.
+# All other characters that don't match [A-Za-z0-9_] are removed without substitution.
+# 
+#
 # Parameters:
 #   x (character): input name to be normalized
 #
 # Returns:
 #   character: normalization of the imput
-#
-# TODO: remove all characters that are not [A-Za-z0-9]
 # 
 normalize_name = function(x){
   n = as.character(x)
+  n = gsub(" ", "_", n)
+  n = gsub("-", "_", n)
+  n = gsub("\\.", "_", n)
+  n = gsub("[^A-Za-z0-9_]", "", n)
   n = paste(n, "____________", sep = "")
   n = substr(n, start = 1, stop = 10)
   n = paste(n, " ", sep = "")
@@ -269,7 +275,6 @@ normalize_name = function(x){
 }
 
 # TODO make names unique
-
 
 
 
