@@ -42,15 +42,28 @@ make_trees = function(data, name){
   
   # read nexus data from disk in propper nexus format
   d = read.nexus.data(nexus_path)
+  res$nexus = d
   # the above is technically a workaround I came up with, to avoid data format problems.
   # storing the nexus file is just a nice side effect.
   
   
+  # generic representation of data
+  align = as.alignment(d)
+  res$alignment = align
+  res$character = as.character(res$alignment)
+  
   
   # create phyDat object from nexus data
-  phy = phyDat(d, type = "USER", levels = c("?","-","0","1","2","3","4","5","6","7","8","9"))
+  phy = phyDat(d, type = "USER", levels = c("0","1","2","3","4","5","6","7","8","9","-"), ambiguity = c("?"))
+  #phy = phyDat(d, type = "USER", levels = c("?","-","0","1","2","3","4","5","6","7","8","9"))
+  #phy = read.phyDat(nexus_path, format="nexus", type="USER")
   # store in result list
   res$phyDat = phy
+  
+  # Should be identical to phyDat
+  # (so this is basically useless - but that way, the whole nexus-thing could be avoided.)
+  phy2 = as.phyDat(align, type = "USER", levels = c("0","1","2","3","4","5","6","7","8","9","-"), ambiguity = c("?"))
+  res$phy2 = phy2
   
   # calculate neighbour join tree from data
   tree = dist.ml(phy)
@@ -206,6 +219,7 @@ generate_body = function(data){
   data[[1]] = make_unique_names(data[[1]])
   lines = c()
   for (r in 1:nrow(data)){
+    line = normalize_name(data[r,1])
     for (c in 2:ncol(data)){
       line = paste(line, as.character(data[r,c]), sep="")
     }
