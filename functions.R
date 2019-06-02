@@ -55,8 +55,6 @@ make_trees = function(data, name){
   
   # create phyDat object from nexus data
   phy = phyDat(d, type = "USER", levels = c("0","1","2","3","4","5","6","7","8","9","-"), ambiguity = c("?"))
-  #phy = phyDat(d, type = "USER", levels = c("?","-","0","1","2","3","4","5","6","7","8","9"))
-  #phy = read.phyDat(nexus_path, format="nexus", type="USER")
   # store in result list
   res$phyDat = phy
   
@@ -324,10 +322,32 @@ normalize_name = function(x){
   n
 }
 
-# TODO make names unique: Eventually, a 
 
 
 
+
+
+
+
+
+#
+# get_random_data
+# ---------------
+#
+# This function generates a random data sample:
+#    5-15 taxa (rows)
+#    20-200 sequence length (columns)
+#    in this alignment matrix, every data point is random.
+#
+# Of course, this data does not allow for sensible dendrograms; but it proofs that the script works.
+# 
+#
+# Parameters:
+#   None
+#
+# Returns:
+#   data.frame: random data
+# 
 get_random_data = function(){
   # random dimensions
   rows = floor(runif(1, min=5, max=15))
