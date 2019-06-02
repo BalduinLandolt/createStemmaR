@@ -16,12 +16,16 @@
 # and re-run the script. Then it should work.
 
 
+
+
 # Run instructions:
 # =================
 #
-# - set working directory to where the data lies, or adjust paths accordingly.
+# - set working directory to the project root (or adjust all file paths in the script accordingly).
 # - install required packages
 # - run script step by step
+
+
 
 
 # imports:
@@ -47,7 +51,7 @@
 library(ape)
 library(phangorn)
 
-# load functions
+# load functions in external file
 source("functions.R")
 
 
